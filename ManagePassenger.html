@@ -145,20 +145,8 @@
                                             <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td> 
-                                                <button class="actionBtn3" type="button"><img src="img/edit.png" style="height: 15px;"></button> 
-                                                <button class="actionBtn" type="button"><img src="img/eye.png" style="height: 15px;"></button> 
-                                                <button class="actionBtn2" type="button"><img src="img/trash.png" style="height: 15px;"></button>
-                                               
-                                            </td>
-                                        </tr>
+                                    <tbody id="tbody1">
+                                       
                                     </tbody>
                                 </table>
                             </div>
@@ -199,7 +187,7 @@
                     </button>
                 </div>
                 <div class="modal-body container" style="background-color: #FEDF3F;">
-                         <form class="user" method="POST">
+                         <form class="user" id="formReg">
                            <div class=" form-group row">
                                <div class=" col-sm-6">
 
@@ -273,9 +261,9 @@
 
                                     <div class="form-group">
                                        
-                                         <input type="submit" value="Submit"  id="submitData" name="submitData" style="background-color:#59AD6A; border: none; border-radius: 20px; height: 45px; width: 100%; color: white; font-weight: bold;"  >
+                                         <input type="button" value="Submit"  id="submitData" name="submitData" style="background-color:#59AD6A; border: none; border-radius: 20px; height: 45px; width: 100%; color: white; font-weight: bold;"  >
                                     </div>
- 
+                                </form>
                                </div>
                            </div> 
                     
@@ -305,41 +293,36 @@
 
      <!-- Firebase -->
 
-    
+     <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
 
+      import { getFirestore, collection, addDoc, getDoc, getDocs, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
 
-</body>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyAYLfR72YvVWK7NKuYv0i8cZLeOyky_2UI",
+        authDomain: "e-hatid-ac4b8.firebaseapp.com",
+        databaseURL: "https://e-hatid-ac4b8-default-rtdb.firebaseio.com",
+        projectId: "e-hatid-ac4b8",
+        storageBucket: "e-hatid-ac4b8.appspot.com",
+        messagingSenderId: "151893715495",
+        appId: "1:151893715495:web:73acd878337b5723113c02",
+        measurementId: "G-2LCVSW0Y8J"
+      };
 
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
 
-  import { getFirestore, addDoc, collection  } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+      // Initialize Cloud Firestore and get a reference to the service
+      const db = getFirestore(app);
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAYLfR72YvVWK7NKuYv0i8cZLeOyky_2UI",
-    authDomain: "e-hatid-ac4b8.firebaseapp.com",
-    databaseURL: "https://e-hatid-ac4b8-default-rtdb.firebaseio.com",
-    projectId: "e-hatid-ac4b8",
-    storageBucket: "e-hatid-ac4b8.appspot.com",
-    messagingSenderId: "151893715495",
-    appId: "1:151893715495:web:c66ce45a224b36f0113c02",
-    measurementId: "G-K4WTYXS330"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  // Initialize Cloud Firestore and get a reference to the service
-  const db = getFirestore(app);
-
-  submitData.addEventListener('click', (e) => {
+      submitData.addEventListener('click', (e) => {
         var firstName = document.getElementById('fn').value;  
         var lastName = document.getElementById('ln').value;  
         var referralCode = document.getElementById('referralCode').value;
@@ -351,14 +334,93 @@
 
         addDoc(collection(db, "passengers"), {
               email: email,
-              first name: firstName,
-              last name: lastName,
+              first_name: firstName,
+              last_name: lastName,
               password: password,
               username: username
             });
-
+        document.getElementById("formReg").reset();    
         alert('Yehey!');
      });   
-</script>  
+      
+     var tbody = document.getElementById('tbody1');
+     var passNo = 0;
+     function  AddItemsToTable(firstName, lastName, username, referralCode,email, mobileNumber, password ){
+            
+            let trow = document.createElement('tr');
+            let td1 = document.createElement('td');
+            let tdname = document.createElement('td');
+            let tduserName = document.createElement('td');
+            let tdemail = document.createElement('td');
+            let tdmobileNum = document.createElement('td');
+            let tdrefCode = document.createElement('td');
 
-</html>  
+            td1.innerHTML = ++passNo;
+            tdname.innerHTML = firstName;
+            tduserName.innerHTML = lastName;
+            tdemail.innerHTML = email;
+            tdrefCode.innerHTML = username;
+            tdmobileNum.innerHTML = password;
+
+            trow.appendChild(td1);
+            trow.appendChild(tdname);
+            trow.appendChild(tduserName);
+            trow.appendChild(tdemail);
+            trow.appendChild(tdmobileNum);
+            trow.appendChild(tdrefCode);
+
+            tbody.appendChild(trow);
+        }
+
+        function AddAllItemsToTheTable(PassengersDocsList){
+            tbody.innerHTML="";
+            passNo = 0;
+            PassengersDocsList.forEach(element =>{
+                AddItemsToTable(element.firstname, element.lastname, element.email, element.username, element.password);
+            });      
+
+        }
+
+        async function GetAllDataOnce(){
+            const querySnapshot = await getDocs (collection(db,"passengers"));
+
+            var passengers = [];
+
+            querySnapshot.forEach(doc =>{
+                passengers.push(doc.data());
+            });
+
+            AddAllItemsToTable(passengers);
+        }
+
+        async function GetAllDataRealtime(){
+            const dbRef = collection(db,"passengers");
+
+            onSnapshot(dbRef,(querySnapshot)=>{
+
+                var passengers = [];
+
+                querySnapshot.forEach(doc =>{
+                    passengers.push(doc.data());
+                });
+                AddAllItemsToTheTable(passengers);
+            });
+
+        }
+
+        window.onload = GetAllDataRealtime;
+
+
+
+</script>
+
+
+
+  
+
+
+</body>
+
+  
+
+</html>
